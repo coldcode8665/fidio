@@ -13,7 +13,7 @@
     <main class="bg-authBodyColor md:h-screen">
     <nav class="bg-navColor h-24 w-full">
         <div class="flex md:flex-row justify-between items-center text-white w-9/12 mx-auto pt-4">
-            <img src="{{ url('images/icons/logo.svg') }}">
+            <a href="/"><img src="{{ url('images/icons/logo.svg') }}"></a>
             <ul class="flex space-x-6 text-xl">
                 <li><a href="{{ route('auth.login') }}"  wire:navigate>Login</a></li>
                 <li><a href="{{ route('auth.signup') }}" wire:navigate>Sign up</a></li>

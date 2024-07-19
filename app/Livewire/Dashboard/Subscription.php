@@ -10,6 +10,11 @@ use Livewire\Attributes\On;
 
 class Subscription extends Component
 {
+    public $video;
+
+    public function mount(){
+        $this->video = Video::where('user_id',auth()->id())->where('subscribe',true)->get();
+    }
 
     #[Layout('components.dashboard.layout')]
     public function render()

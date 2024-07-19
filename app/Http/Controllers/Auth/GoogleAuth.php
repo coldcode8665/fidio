@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\Website;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,6 @@ class GoogleAuth extends Controller
     {
         $user = Socialite::driver('google')->user();
 
-
       if(User::where('google_id',$user->user['id'])->first() == null){
              $reg =  User::create([
             'name' => $user->user['name'],
@@ -40,13 +40,19 @@ class GoogleAuth extends Controller
             'password' => Hash::make(''),
             'google_id' => $user->user['id'],
             'profile' => $user->user['picture']
-        ]);
-
+            ]);
+           
         if($reg){
             $data = User::where('google_id',$user->user['id'])->first();
             session(['token' => $user->token]);
+            Website::create(['user_id' => $data->id,'domain' => str_replace(' ',"",strtolower($user->user['name']))]);
             Auth::login($data);
-            return redirect()->route('dashboard.subscription');
+            
+            if(session()->has('video')){
+                return redirect()->route('dashboard.videos.new');
+            }else{
+                return redirect()->route('dashboard.subscription');
+            }
         }else{
             return back()->with(['msg' => "Oops something went wrong"]);
         }
@@ -54,7 +60,12 @@ class GoogleAuth extends Controller
             $data = User::where('google_id',$user->user['id'])->first();
             session(['token' => $user->token]);
             Auth::login($data);
-            return redirect()->route('dashboard.subscription');
+
+            if(session()->has('video')){
+                return redirect()->route('dashboard.videos.new');
+            }else{
+                return redirect()->route('dashboard.subscription');
+            }
        
       }
 

@@ -12,6 +12,10 @@ class Selectvideo extends Component
 {
     public $data = [];
 
+    public $id = [];
+
+    public $videos;
+
     public function delete($id){
         $data = Video::where('id',$id)->first();
 
@@ -25,16 +29,26 @@ class Selectvideo extends Component
 
     #[On('price')]
     public function setPrice($data){
-       for($num = 0; $num < count($data); $num++){
-            Video::where('id',$data[$num]['id'])->update(['price' => $data[$num]['amount']]);
+        // $data[0]['ids'];
+       for($num = 0; $num < count($data[0]['ids']); $num++){
+            Video::where('id',$data[0]['ids'][$num])->update(['price' => $data[0]['amount'],'subscribe' => true]);
        }
        return redirect()->route('dashboard.subscription');
+    }
+
+    public function save(){
+        dd($this->id);
+    }
+
+    public function mount(){
+
+        $this->videos = Video::latest()->where('user_id',auth()->id())->whereIn('visibility',['public','Subscriber-only'])->get();
     }
 
     #[Layout('components.dashboard.layout')]
     public function render()
     {
-        $videos = Video::latest()->where('user_id',auth()->id())->get();
-        return view('livewire.dashboard.selectvideo')->with(['videos' => $videos]);
+        
+        return view('livewire.dashboard.selectvideo');
     }
 }

@@ -5,9 +5,9 @@ document.addEventListener('livewire:navigated', () => {
     let tabcontent = document.querySelector(".tabcontent");
 
     for(let i = 0; i < tabcontent.children.length; i++){
-        tabcontent.children[i].style.display = "none";
+        tabcontent.children[i].classList.add("hidden");
     }
-    tabcontent.children[0].style.display = "block";
+    tabcontent.children[0].classList.remove("hidden");
 
     function tabreset(){
         for(let i = 0; i < tab.children.length; i++){
@@ -16,7 +16,7 @@ document.addEventListener('livewire:navigated', () => {
     }
     function tabcontentreset(){
         for(let i = 0; i < tabcontent.children.length; i++){
-            tabcontent.children[i].style.display = "none";
+            tabcontent.children[i].classList.add("hidden");
         }
     }
 
@@ -25,12 +25,8 @@ document.addEventListener('livewire:navigated', () => {
             tabreset();
             tabcontentreset()
             tab.children[i].classList.add('bg-gray-200');
-            tabcontent.children[0].style.display = "none";
-            if((i+1) > tab.children.length){
-                tabcontent.children[i].style.display = "block";
-            }else{
-                tabcontent.children[i+1].style.display = "block";
-            }
+            tabcontent.children[i].classList.remove("hidden");
+           
      })
     }
 })

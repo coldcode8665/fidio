@@ -1,54 +1,8 @@
-<section class="w-8/12 mx-auto my-16"  x-data="{ uploading: false, progress: 0 }"
-        x-on:livewire-upload-start="uploading = true"
-        x-on:livewire-upload-finish="uploading = false"
-        x-on:livewire-upload-error="uploading = false"
-        x-on:livewire-upload-progress="progress = $event.detail.progress">
+<section class="w-8/12 mx-auto my-16">
 
-    <div class="flex justify-between">
-        <h1 class="text-3xl text-authBodyColor font-bold">Upload a video</h1>
-        <div wire:loading>Upload in progress...</div>
+    <div class="flex justify-between my-12">
+        <h1 class="text-3xl text-authBodyColor font-bold">Edit video</h1>
         <button class="bg-btnColor px-10 py-2 text-white rounded-md shadow-lg" wire:click="save" wire:loading.class="opacity-50" wire:loading.attr="disabled">save</button>
-    </div>
-
-
-
-
-        <div x-show="uploading">
-            <div class="flex justify-between my-6">
-                <p class="text-2xl text-gray-600">Uploading</p>
-                <button class="border-2 border-gray-400 rounded-md px-6 py-2">Cancel upload</button>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div class="bg-btnColor h-2.5 rounded-full" :style="`width: ${progress}%`"></div>
-            </div>
-        </div>
-    
-
- 
-    <div class="border-2 border-dotted border-authBodyColor my-10 p-16 space-y-2 rounded-lg relative">
-    @if(!$video)
-    <center>
-            @error('video')
-                <p class="text-btnColor">{{ $message }}</p>
-            @enderror
-    </center>
-        <p class="mx-auto  w-8/12 text-center text-2xl font-bold text-navColor">Drag and drop your video here, or <span class="text-btnColor underline"><input type="file" wire:model="video" title=" " class="absolute w-full opacity-0 border top-0 left-0 h-full">click here</span></p>
-        <p class="mx-auto  w-8/12 text-center text-navColor">supports MP4, MPEG, AVI (MAX 256 GB)</p>
-    @else
-    <div>
-            <div class="flex justify-between my-6">
-                <div>
-                    <p class="text-lg text-gray-600 ">Uploaded: <span class="text-sm">{{ $video->getClientOriginalname() }}</span></p>
-                </div>
-                <button class="border-2 border-gray-400 rounded-md px-6 py-2" wire:click="clearVideo">Delete</button>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div class="bg-green-600 h-2.5 rounded-full" style="`width: 100%`"></div>
-            </div>
-    </div>
-    
-    @endif
-    
     </div>
 
     <div class="space-y-10">
@@ -75,7 +29,7 @@
     <h1 class="text-3xl text-authBodyColor font-bold my-10">Video thumbnail</h1>
 
     <div class="border flex p-2 justify-between my-4">
-        <img src="{{ $thumbnail ? $thumbnail->temporaryUrl() : url('images/icons/thumbnail.png') }}" class="block w-4/12 h-full">
+        <img src="{{ $thumbnail ? $thumbnail->temporaryUrl() : asset('storage/'.$video->thumbnail) }}" class="block w-4/12 h-full">
 
         <div class="w-8/12">
             <div class="w-full h-full flex flex-col justify-center items-center">
@@ -176,9 +130,9 @@
     <p class="py-2 text-gray-500">Who can watch this video</p>
 
     <div class="flex w-6/12 border justify-center text-center mb-2 rounded-md shadow-md tab" wire:ignore >
-        <div class="border-r-2 w-4/12 p-2 public cursor-pointer" >Public</div>
-        <div class="border-r-2 w-4/12 p-2 cursor-pointer" >Paid</div>
-        <div class="w-4/12 p-2 cursor-pointer" >Subscriber-only</div>
+        <div class="border-r-2 w-4/12 p-2 public cursor-pointer @if($video->visibility == 'public') bg-btnColor @endif" >Public</div>
+        <div class="border-r-2 w-4/12 p-2 cursor-pointer @if($video->visibility == 'paid') bg-btnColor @endif" >Paid</div>
+        <div class="w-4/12 p-2 cursor-pointer @if($video->visibility == 'Subscriber-only') bg-btnColor text-white @endif" >Subscriber-only</div>
     </div>
     <div class="content mb-12"  wire:ignore>
             <div class="text-authBodyColor hidden">This video will be available to everyone</div>

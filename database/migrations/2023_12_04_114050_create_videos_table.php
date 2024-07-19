@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string("description");
             $table->string("thumbnail");
             $table->string("visibility");
+            $table->boolean("youtube")->default(false);
+            $table->boolean("subscribe")->default(false);
             $table->string("price")->nullable();
             $table->timestamps();
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");

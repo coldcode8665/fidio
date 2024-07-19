@@ -13,6 +13,7 @@ use Livewire\Attributes\Layout;
 use Google_Http_MediaFileUpload;
 use App\Models\Video as FidioVidio;
 use App\Models\Distribution;
+use App\Models\Video;
 use Google\Service\YouTube as GSYT;
 use Illuminate\Support\Facades\Http;
 use Google\Service\YouTube\VideoStatus;
@@ -32,7 +33,7 @@ use Google\Service\YouTube\Video as GSYTV;
 use Symfony\Component\HttpFoundation\File\File;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
-class NewVideo extends Component
+class Edit extends Component
 {
     use WithFileUploads;
 
@@ -45,22 +46,28 @@ class NewVideo extends Component
     #[Rule('numeric')]
     public $price = "";
 
-    #[Rule('required|image|max:10024')] // 1MB Max
+    // #[Rule('image|max:10024')] // 1MB Max
     public $thumbnail;
-
-    #[Rule('required|file|mimes:mp4,avi,mpeg')]
-    public $video;
 
     public $toggle;
 
 
+    public $video;
 
     public $youtubeData;
     public $cid = [];
-    public $visibility = "public";
+    public $visibility = "";
 
-    public function mount()
+    public function mount(Video $video)
     {
+        $this->video = $video;
+
+        $this->title = $this->video->title;
+        $this->description = $this->video->description;
+        $this->visibility = $this->video->visibility;
+
+        $this->price = $this->video->price ? $this->video->price : null;
+
         $this->toggle = Distribution::where('user_id',auth()->id())->first();
         if(session()->has('video')){
             $this->title = session('video')['title'];
@@ -109,25 +116,18 @@ class NewVideo extends Component
 
     public function save()
     {
+        // $this->validate();
+     
+        $thumbnail_path = $this->thumbnail ? $this->thumbnail->store('thumbnail') : null;
 
-        $this->validate();
-        // if (count($this->cid) < 1) {
-        //     return session()->flash('distroerror', "Please select a distribution.");
-        // }
-        $path = $this->video->store("videos");
-        $thumbnail_path = $this->thumbnail->store('thumbnail');
-        //dd(storage_path($path));
-        //chown(storage_path($path), 'daemon');
-
-        $data = FidioVidio::create([
-            'user_id' => auth()->id(),
-            'video' => $path,
+        $data = FidioVidio::where('id',$this->video->id)->update([
             'title' => $this->title,
             'description' => $this->description,
-            'thumbnail' => $thumbnail_path,
-            'visibility' => $this->visibility,
+            'thumbnail' => $thumbnail_path ? $thumbnail_path : $this->video->thumbnail,
+            'visibility' => $this->visibility ? $this->visibility : $this->video->visibility,
             'price' => $this->price ? $this->price : null
         ]);
+
         if (count($this->cid) > 0) {
 
             FidioVidio::where('id',$data->id)->update(['youtube' => true]);
@@ -203,6 +203,6 @@ class NewVideo extends Component
     #[Layout('components.dashboard.layout')]
     public function render()
     {
-        return view('livewire.dashboard.new-video');
+        return view('livewire.dashboard.edit');
     }
 }

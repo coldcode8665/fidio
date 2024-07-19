@@ -2,12 +2,12 @@
     <h1 class="text-3xl font-bold text-authBodyColor">Subscriptions</h1>
 <div class="flex justify-between mt-10">
             <h1 class="text-xl text-authBodyColor">select videos</h1>
-                <a class="bg-btnColor px-4 py-2 text-white rounded-md cursor-pointer saveLink" href="{{ route('dashboard.videos.new') }}" wire:navigate>save changes</a>
+                <button class="bg-btnColor px-4 py-2 text-white rounded-md cursor-pointer save">save changes</button>
 </div>
 
         <!-- Modal -->
 
-        <div class="hidden w-full  h-full items-center justify-center bg-black bg-opacity-50 absolute top-0 left-0 bottom-0 z-10 modal" id="modal">
+        <div class="hidden w-full  h-screen items-center justify-center bg-black bg-opacity-50 absolute top-0 left-0 bottom-0 z-10 modal" id="modal">
                 <div class="bg-white mx-auto my-64 w-3/12 rounded-md p-6 setup">
                     <div class="flex justify-between">
                         <h1 class="font-bold text-lg w-9/12 text-center mx-auto text-authBodyColor">Set your monthly subscription price</h1>
@@ -20,7 +20,7 @@
                             <option value="USD">USD</option>
                         </select>
                     </div>
-                    <button class="bg-btnColor w-full py-2 text-white rounded-md save">Save</button>
+                    <button class="bg-btnColor w-full py-2 text-white rounded-md submit">Save</button>
                 </div>
                 <div class="bg-white mx-auto my-64 w-3/12 rounded-md p-6 success">
                     <div class="flex justify-between">
@@ -28,7 +28,7 @@
                         <div class="text-authBodyColor font-bold cursor-pointer modalCancel" id="closeSub">X</div>
                     </div>
                     <div class="text-center text-sm text-authBodyColor my-4"> Congratulations! your subscription has beeen set up</div>
-                    <button class="bg-btnColor w-full py-2 text-white rounded-md save">Okay</button>
+                    <button class="bg-btnColor w-full py-2 text-white rounded-md savelink">Okay</button>
                 </div>
         </div>
 
@@ -47,8 +47,8 @@
             <tbody>
                 @foreach( $videos as $video)
                     <tr class="my-6 border-b hover:bg-gray-100 relative vi hidden">
-                        <td><input type="checkbox" value="{{ $video->id }}" class="checkbox"></td>
-                        <td class="flex my-4 mx-2 ">
+                        <td><input type="checkbox" value="{{ $video->id }}" class="checkbox"  {{ $video->visibility == "Subscriber-only" ? 'checked' : ''}} {{ $video->visibility != "Subscriber-only" && $video->price != null ? 'checked' : ''}} {{ $video->price != null ? 'disabled' : ''}}></td>
+                        <td class="flex my-4 mx-2 w-10/12">
                             <img src="{{ asset('storage/'.$video->thumbnail) }}" class="w-24 h-24 rounded-md">
                             <div class="mx-6">
                             <h3 class="text-2xl font-bold text-gray-600">{{ $video->title }}</h3>
@@ -56,13 +56,18 @@
                             <small class="text-gray-600">{{$video->created_at->diffForHumans() }}</small>
                             </div>
                         </td>
-                        <td class="my-4 mx-2 ">
-                            <img src="{{ asset('images/icons/youtube_icon.png') }}" class="block mx-auto">
+                        <td class="my-4 mx-2 w-2/12">
+                            <div class="flex justify-center items-center space-x-4">
+                                <img src="{{ asset('images/icons/web.svg') }}" class="">
+                                @if($video->youtube) 
+                                    <img src="{{ asset('images/icons/youtube_icon.png') }}" class="">
+                                @endif
+                            </div>
                         </td>
-                        <td class="my-4 mx-2 text-center">
+                        <td class="my-4 mx-2 text-center w-2/12">
                         ---
                         </td>
-                        <td class="my-4 mx-2 text-center">
+                        <td class="my-4 mx-2 text-center w-2/12">
                             <p class="text-gray-600 mx-auto">{{ $video->visibility }}</p>
                         </td>
                         <td wire:ignore>
@@ -94,14 +99,17 @@ document.addEventListener("livewire:navigated",function(){
         let body = document.querySelector("#videobody");
 
         let data = [];
+        let record = [];
 
-        let save = document.querySelectorAll(".save");
-        let saveLink = document.querySelector(".saveLink");
+        let save = document.querySelector(".save");
+        let saveLink = document.querySelector(".savelink");
+        let submit = document.querySelector(".submit");
+        let close = document.querySelector(".close");
 
-        if(data.length < 1){
-            saveLink.setAttribute('disabled',true);
-            saveLink.classList.add('bg-gray-300');
-        }
+        // if(record.length < 1){
+        //     save.setAttribute('disabled',true);
+        //     save.classList.add('bg-gray-300');
+        // }
 
         let setup = document.querySelector(".setup");
         let success = document.querySelector(".success");
@@ -122,53 +130,54 @@ document.addEventListener("livewire:navigated",function(){
             }
         })
 
-        checkbox.forEach((val) => {
-            val.addEventListener('change',function(event){
-                id = event.target.value;
-                if(val.checked){
+
+        save.addEventListener('click',function(){
+            record = [];
+            checkbox.forEach((val) => {
+                if(val.checked && val.disabled == false){
+                    record.push(val.value);
+                    console.log(record)
                     modal.classList.remove('hidden');
                     modal.classList.add('flex');
-
                     success.classList.add('hidden');
                     setup.classList.remove('hidden');
                 }
-            })
         })
+    })
 
-        save[0].addEventListener("click",function(){
+        submit.addEventListener("click",function(){
             let validate = /^\d+$/
             if(validate.test(parseInt(amount.value))){
-                data.push({id,amount:amount.value});
+                data.push({ids:record,amount:amount.value});
                 success.classList.remove('hidden');
                 setup.classList.add('hidden');
-                if(data.length > 0){
-                    saveLink.removeAttribute('disabled');
-                    saveLink.classList.remove('bg-gray-300');
-                }
-                amount.value = "";
                 console.log(data);
             }
         })
 
-        save[1].addEventListener('click',function(){
-            modal.classList.add('hidden');
-        })
-
-        saveLink.addEventListener("click",function(){
+        saveLink.addEventListener('click',function(){
             @this.dispatch('price',{data});
         })
 
+        // save[1].addEventListener('click',function(){
+        //     modal.classList.add('hidden');
+        // })
+
+        // saveLink.addEventListener("click",function(){
+        //     @this.dispatch('price',{data});
+        // })
+
         
-        modalcancel[0].addEventListener('click',function(event){
-            if(event.target.id == 'close'){
-                modal.classList.add('hidden');
-            }
-        })
-        modalcancel[1].addEventListener('click',function(event){
-            if(event.target.id == 'closeSub'){
-                modal.classList.add('hidden');
-            }
-        })
+        // modalcancel[0].addEventListener('click',function(event){
+        //     if(event.target.id == 'close'){
+        //         modal.classList.add('hidden');
+        //     }
+        // })
+        // modalcancel[1].addEventListener('click',function(event){
+        //     if(event.target.id == 'closeSub'){
+        //         modal.classList.add('hidden');
+        //     }
+        // })
         
     
 document.addEventListener('click',function(event){

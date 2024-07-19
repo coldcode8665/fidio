@@ -1,6 +1,6 @@
 
 <div class="w-8/12 mx-auto mt-16" id="videobody" >
-    @if( count($videos) < 1)
+    @if( count($totalVideos) < 1)
         <h1 class="text-3xl font-bold text-authBodyColor">Videos</h1>
         <section class="w-8/12 mx-auto mt-20 text-center space-y-4">
             <img src="{{ url('images/icons/upload_icon.svg') }}" class="mx-auto">
@@ -39,47 +39,62 @@
         </div>
 
         <table class="w-full mt-10 h-auto">
+            <thead>
                 <tr class="text-left text-gray-600 border-b uppercase text-xl">
                     <th class="pb-4 text-lg  ">Video</th>
                     <th class="pb-4 text-lg  text-center">Distribution</th>
                     <th class="pb-4 text-lg  text-center">Views</th>
                     <th class="pb-4 text-lg text-center">Visibility</th>
                 </tr>
+            </thead>
             <tbody>
-                @foreach( $videos as $video)
-                    <tr class="my-6 border-b hover:bg-gray-100 relative vi hidden">
-                        <td class="flex my-4 mx-2 ">
-                            <img src="{{ asset('storage/'.$video->thumbnail) }}" class="w-24 h-24 rounded-md">
-                            <div class="mx-6">
-                            <h3 class="text-2xl font-bold text-gray-600">{{ $video->title }}</h3>
-                            <p class="text-lg text-gray-600">{{ $video->description }}</p>
-                            <small class="text-gray-600">{{$video->created_at->diffForHumans() }}</small>
-                            </div>
-                        </td>
-                        <td class="my-4 mx-2 ">
-                            <img src="{{ asset('images/icons/youtube_icon.png') }}" class="block mx-auto">
-                        </td>
-                        <td class="my-4 mx-2 text-center">
-                        ---
-                        </td>
-                        <td class="my-4 mx-2 text-center">
-                            <p class="text-gray-600 mx-auto">{{ $video->visibility }}</p>
-                        </td>
-                        <td wire:ignore>
-                            <span class="font-bold text-2xl cursor-pointer option" id="option">...</span>
-                            <div class="absolute w-3/12 rounded-md shadow-md bg-white right-3 z-10 p-2 space-y-4 optionValue hidden">
-                                <div class="flex space-x-4 hover:bg-gray-100 p-2 rounded-md text-gray-600 cursor-pointer">
-                                    <img src="{{ asset('images/icons/edit.png') }}">
-                                    <p class=>View video details</p>
+                @if(count($videos) > 0)
+                    @foreach( $videos as $video)
+                        <tr class="my-6 border-b hover:bg-gray-100 relative vi hidden">
+                            <td class="flex my-4 mx-2 w-10/12">
+                                <img src="{{ asset('storage/'.$video->thumbnail) }}" class="w-24 h-24 rounded-md">
+                                <div class="mx-6">
+                                <h3 class="text-2xl font-bold text-gray-600">{{ $video->title }}</h3>
+                                <p class="text-lg text-gray-600">{{ $video->description }}</p>
+                                <small class="text-gray-600">{{$video->created_at->diffForHumans() }}</small>
                                 </div>
-                                <div class="flex space-x-4 hover:bg-gray-100 p-2 rounded-md text-gray-600 cursor-pointer" wire:click="delete({{ $video->id }})">
-                                    <img src="{{ asset('images/icons/trash.png') }}">
-                                    <p>Delete Permanently</p>
+                            </td>
+                            <td class="my-4 mx-2 w-2/12">
+                                <div class="flex justify-center items-center space-x-4">
+                                <img src="{{ asset('images/icons/web.svg') }}" class="">
+                                @if($video->youtube) 
+                                    <img src="{{ asset('images/icons/youtube_icon.png') }}" class="">
+                                @endif
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
+                            </td>
+                            <td class="my-4 mx-2 text-center w-2/12">
+                            {{ $video->views()->count() ? $video->views()->count() : "---" }}
+                            </td>
+                            <td class="my-4 mx-2 text-center w-2/12">
+                                <p class="text-gray-600 mx-auto">{{ $video->visibility }}</p>
+                            </td>
+                            <td wire:ignore>
+                                <span class="font-bold text-2xl cursor-pointer option" id="option">...</span>
+                                <div class="absolute w-3/12 rounded-md shadow-md bg-white right-3 z-10 p-2 space-y-4 optionValue hidden">
+                                    <a href="{{ route('dashboard.videos.edit',['video' => $video->id]) }}">
+                                    <div class="flex space-x-4 hover:bg-gray-100 p-2 rounded-md text-gray-600 cursor-pointer">
+                                        <img src="{{ asset('images/icons/edit.png') }}">
+                                        <p class=>Edit video details</p>
+                                    </div>
+                                    </a>
+                                    <div class="flex space-x-4 hover:bg-gray-100 p-2 rounded-md text-gray-600 cursor-pointer" wire:click="delete({{ $video->id }})">
+                                        <img src="{{ asset('images/icons/trash.png') }}">
+                                        <p>Delete Permanently</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                
+                   <div class="absolute">No videos</div>  
+                
+                @endif
             </tbody>
         </table>
         <div class="w-2/12 mx-auto border-4 text-authBodyColor cursor-pointer rounded-md text-center py-2 my-4 loadmore"> load more </div>

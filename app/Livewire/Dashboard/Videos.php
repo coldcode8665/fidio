@@ -14,10 +14,15 @@ class Videos extends Component
 {
     public $videos;
 
+    public $totalVideos;
+
     #[Url]
     public $filter = "";
 
     public function mount(){
+        
+        $this->totalVideos = Video::where('user_id',auth()->id())->get();
+
         if($this->filter == ""){
             $this->videos = Video::latest()->where('user_id',auth()->id())->get();
         }else{

@@ -12,8 +12,12 @@ use App\Livewire\Auth\Passwordresetdone;
 use App\Livewire\Dashboard\Distribution;
 use App\Livewire\Dashboard\Subscription;
 use App\Http\Controllers\Auth\GoogleAuth;
+use App\Livewire\Dashboard\Edit;
 use App\Livewire\Dashboard\Selectvideo;
+use App\Livewire\Dashboard\Website;
 use App\Livewire\Landing\Index as LandingIndex;
+use App\Livewire\StoreFront\Index as StoreFrontIndex;
+use App\Livewire\StoreFront\View;
 
 //Auth Routes
 Route::middleware('guest')->group(function(){
@@ -30,19 +34,26 @@ Route::get("/google/signin",[GoogleAuth::class,"redirectToGoogle"])->name("auth.
 Route::get("/authenticate",[GoogleAuth::class,"handleGoogleCallback"])->name("auth.google.confirm");
 
 //Dashboard Routes
-Route::middleware("auth")->group(function(){
+Route::middleware(["auth"])->group(function(){
     Route::get("/dashboard",Index::class)->name("dashboard");
     Route::get("/subscription",Subscription::class)->name("dashboard.subscription");
     Route::get("/subscription/select",Selectvideo::class)->name("dashboard.subscription.select");
     Route::get("/videos",Videos::class)->name("dashboard.videos");
     Route::get("/videos/filter/{filter}",Videos::class)->name("dashboard.videos.filter");
     Route::get("/new/videos", NewVideo::class)->name("dashboard.videos.new");
+    Route::get("/videos/{video}/edit", Edit::class)->name("dashboard.videos.edit");
     Route::get("/distribution", Distribution::class)->name("dashboard.distribution");
+    Route::get("/distribution/website/edit", Website::class)->name("dashboard.website");
 });
-//logout
 
+Route::get("/user/{domain}",StoreFrontIndex::class)->name("storefront.index");
+Route::get("/{website}/{video}/watch",View::class)->name("storefront.view");
+
+
+//logout
 Route::get("/logout",function(){
     auth()->logout();
     session(['token' => null]);
+    session(['video' => null]);
     return redirect()->route('auth.login');
 })->name("logout");

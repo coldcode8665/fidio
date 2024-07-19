@@ -4,7 +4,7 @@
             <img src="{{ url('images/icons/logo.svg') }}">
             <ul class="flex items-center space-x-6 text-xl">
                 <li><a href="{{ route('auth.login') }}"  wire:navigate>Log in</a></li>
-                <li class="bg-btnColor px-4 py-2 rounded-md"><a href="{{ route('auth.signup') }}" wire:navigate>Request Access</a></li>
+                <li class="bg-btnColor px-4 py-2 rounded-md"><a href="{{ route('auth.signup') }}" wire:navigate>Sign up</a></li>
             </ul>
         </div>
 </nav>
@@ -19,7 +19,7 @@
                     eveniet sed ex quisquam repudiandae, eaque deserunt,quas natus accusamus voluptate 
                 </small>
 
-                <a href="#" class="bg-btnColor text-white w-6/12 text-center py-6 px-6 rounded-md">Request Access</a>
+                <a href="{{ route('auth.signup') }}" class="bg-btnColor text-white w-6/12 text-center py-6 px-6 rounded-md font-bold" wire:navigate>Sign up</a>
             </div>
         </div>
         <div>
@@ -34,11 +34,10 @@
 
 <!-- slider cards -->
 
-<section class="flex flex-nowrap  space-x-16 mt-28  overflow-x-hidden overflow-y-hidden h-full">
+<section class="flex flex-nowrap  space-x-16 mt-28  overflow-x-hidden overflow-y-hidden h-full -ml-3">
 
-    <div class="w-5/12 rounded-lg flex-shrink-0 relative">   
-        <img src="{{ asset('images/icons/man.png') }}" class="block rounded-3xl">
-            <div class="absolute top-60 px-12 mt-16 w-12/12 space-y-8 rounded-lg" style="background-image: linear-gradient(transparent,purple 100%)">
+    <div class="w-4/12 rounded-3xl h-screen flex flex-col justify-end" style="background-image: url('{{ asset('images/icons/man.png') }}'); background-size:cover; background-repeat:no-repeat;">   
+            <div class="px-12 mt-32  space-y-8 rounded-lg" style="background-image: linear-gradient(transparent,purple 100%)">
                     <p class="text-7xl text-white font-bold text-left">John Brown</p>
                     <p class="text-white  inline">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                         Assumenda rerum perspiciatis esse quo quos, voluptates beatae autem vero illo alias.</p>
@@ -62,61 +61,57 @@
                     </div>
             </div>
     </div>
-
-    <div class="w-5/12 rounded-lg flex-shrink-0 relative">   
-        <img src="{{ asset('images/icons/man.png') }}" class="block rounded-3xl">
-            <div class="absolute top-60 px-12 mt-16 w-12/12 space-y-8 rounded-lg" style="background-image: linear-gradient(transparent,purple 100%)">
-                    <p class="text-7xl text-white font-bold text-left">John Brown</p>
-                    <p class="text-white  inline">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Assumenda rerum perspiciatis esse quo quos, voluptates beatae autem vero illo alias.</p>
-                        <div class="flex space-x-4">
-                            <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
-                                <img src="{{ asset('images/icons/facebook.png') }}">    
-                            </div>
-                            <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
-                                <img src="{{ asset('images/icons/youtube.png') }}">    
-                            </div>
-                            <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
-                                <img src="{{ asset('images/icons/tiktok.png') }}">    
-                            </div>
+    <div class="w-4/12 rounded-3xl h-screen flex flex-col justify-end" style="background-image: url('{{ asset('images/icons/man.png') }}'); background-size:cover; background-repeat:no-repeat;">   
+        <div class="px-12 mt-32  space-y-8 rounded-lg" style="background-image: linear-gradient(transparent,purple 100%)">
+                <p class="text-7xl text-white font-bold text-left">John Brown</p>
+                <p class="text-white  inline">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Assumenda rerum perspiciatis esse quo quos, voluptates beatae autem vero illo alias.</p>
+                    <div class="flex space-x-4">
+                        <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
+                            <img src="{{ asset('images/icons/facebook.png') }}">    
                         </div>
-                    <div>
-                        <img src="{{ asset('images/icons/videoimg.png') }}">
-                        <div class="flex justify-between text-white font-bold py-1">
-                            <p>Making of a music legend</p>
-                            <p>$10</p>
+                        <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
+                            <img src="{{ asset('images/icons/youtube.png') }}">    
+                        </div>
+                        <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
+                            <img src="{{ asset('images/icons/tiktok.png') }}">    
                         </div>
                     </div>
-            </div>
-    </div>
-
-    <div class="w-5/12 rounded-lg flex-shrink-0 relative">   
-        <img src="{{ asset('images/icons/man.png') }}" class="block rounded-3xl">
-            <div class="absolute top-60 px-12 mt-16 w-12/12 space-y-8 rounded-lg" style="background-image: linear-gradient(transparent,purple 100%)">
-                    <p class="text-7xl text-white font-bold text-left">John Brown</p>
-                    <p class="text-white  inline">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Assumenda rerum perspiciatis esse quo quos, voluptates beatae autem vero illo alias.</p>
-                        <div class="flex space-x-4">
-                            <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
-                                <img src="{{ asset('images/icons/facebook.png') }}">    
-                            </div>
-                            <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
-                                <img src="{{ asset('images/icons/youtube.png') }}">    
-                            </div>
-                            <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
-                                <img src="{{ asset('images/icons/tiktok.png') }}">    
-                            </div>
-                        </div>
-                    <div>
-                        <img src="{{ asset('images/icons/videoimg.png') }}">
-                        <div class="flex justify-between text-white font-bold py-1">
-                            <p>Making of a music legend</p>
-                            <p>$10</p>
-                        </div>
+                <div>
+                    <img src="{{ asset('images/icons/videoimg.png') }}">
+                    <div class="flex justify-between text-white font-bold py-1">
+                        <p>Making of a music legend</p>
+                        <p>$10</p>
                     </div>
+                </div>
+        </div>
+</div>
+<div class="w-4/12 rounded-3xl h-screen flex flex-col justify-end" style="background-image: url('{{ asset('images/icons/man.png') }}'); background-size:cover; background-repeat:no-repeat;">   
+    <div class="px-12 mt-32  space-y-8 rounded-lg" style="background-image: linear-gradient(transparent,purple 100%)">
+            <p class="text-7xl text-white font-bold text-left">John Brown</p>
+            <p class="text-white  inline">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Assumenda rerum perspiciatis esse quo quos, voluptates beatae autem vero illo alias.</p>
+                <div class="flex space-x-4">
+                    <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
+                        <img src="{{ asset('images/icons/facebook.png') }}">    
+                    </div>
+                    <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
+                        <img src="{{ asset('images/icons/youtube.png') }}">    
+                    </div>
+                    <div class="bg-opacity-50 bg-white w-4/12 rounded-md p-3">
+                        <img src="{{ asset('images/icons/tiktok.png') }}">    
+                    </div>
+                </div>
+            <div>
+                <img src="{{ asset('images/icons/videoimg.png') }}">
+                <div class="flex justify-between text-white font-bold py-1">
+                    <p>Making of a music legend</p>
+                    <p>$10</p>
+                </div>
             </div>
     </div>
-  
+</div>
+
 </section>
 
 <!-- edgy line -->
@@ -155,7 +150,7 @@
     <small class="text-lg">All in one place</small>
 </section>
 
-<a href="#" class="bg-btnColor py-6 px-6 text-white mx-auto block w-3/12 text-center mt-20">Reuqest access</a>
+<a href="{{ route('auth.signup')}}" class="bg-btnColor font-bold py-6 px-6 text-white mx-auto block w-3/12 text-center mt-20"  wire:navigate>Sign up</a>
 
 <img src="{{ asset('images/icons/curve.svg') }}" class="block mx-auto my-32 w-10/12 -mt-6">
 
